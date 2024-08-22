@@ -22,10 +22,22 @@ const Form = ({ isSignInPage = true }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const res =  await registeer(formData);
-      console.log(res);
-      // Optionally navigate to a different page on successful registration
-      // navigate('/some-other-page');
+      const res = await fetch(`http://localhost:8000/api/${isSignInPage ? "login" : "register"}`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      });
+      const response = await res.json();
+      console.log(response);
+      if(response){
+        localStorage.setItem('user:token' , "this is a token")
+        localStorage.setItem('user' , 
+          
+           JSON.stringify(response?.user))
+        navigate('/');
+      }
     } catch (error) {
       console.log(error);
     }
